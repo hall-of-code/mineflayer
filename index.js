@@ -60,6 +60,7 @@ function createBot (options = {}) {
   options.plugins = options.plugins || {}
   options.logErrors = options.logErrors === undefined ? true : options.logErrors
   options.loadInternalPlugins = options.loadInternalPlugins !== false
+
   const bot = new Bot()
   if (options.logErrors) {
     bot.on('error', err => console.log(err))
