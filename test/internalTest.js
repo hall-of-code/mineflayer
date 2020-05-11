@@ -18,6 +18,7 @@ mineflayer.testedVersions.forEach((supportedVersion, i) => {
     this.timeout(10 * 1000)
     let bot
     let server
+
     beforeEach((done) => {
       server = mc.createServer({
         'online-mode': false,
@@ -25,25 +26,30 @@ mineflayer.testedVersions.forEach((supportedVersion, i) => {
         // 25565 - local server, 25566 - proxy server
         port: 25567
       })
+
       server.on('listening', () => {
         bot = mineflayer.createBot({
           username: 'player',
           version: supportedVersion,
           port: 25567
         })
+
         done()
       })
     })
+
     afterEach((done) => {
       bot.on('end', done)
       server.close()
     })
+
     it('chat', (done) => {
       bot.once('chat', (username, message) => {
         assert.strictEqual(username, 'gary')
         assert.strictEqual(message, 'hello')
         bot.chat('hi')
       })
+
       server.on('login', (client) => {
         const message = JSON.stringify({
           translate: 'chat.type.text',
@@ -377,36 +383,34 @@ mineflayer.testedVersions.forEach((supportedVersion, i) => {
       const zombiePos = vec3(0, 0, 0)
       const beds = [
         { head: vec3(10, 0, 3), foot: vec3(10, 0, 2), facing: 2, throws: false },
-        { head: vec3(9, 0, 4), foot: vec3(10, 0, 4), facing: 3, throws: true, error: new Error('the bed is too far') },
-        { head: vec3(8, 0, 0), foot: vec3(8, 0, 1), facing: 0, throws: true, error: new Error('there are monsters nearby') },
+        { head: vec3(9, 0, 4), foot: vec3(10, 0, 4), facing: 3, throws: true, error: 'the bed is too far' },
+        { head: vec3(8, 0, 0), foot: vec3(8, 0, 1), facing: 0, throws: true, error: 'there are monsters nearby' },
         { head: vec3(12, 0, 0), foot: vec3(11, 0, 0), facing: 1, throws: false }
       ]
 
       const zombieId = entities.zombie ? entities.zombie.id : entities.Zombie.id
-      let bedBlock
-      if (mineflayer.supportFeature('oneBlockForSeveralVariations', version.majorVersion)) {
-        bedBlock = blocks.bed
-      } else if (mineflayer.supportFeature('blockSchemeIsFlat', version.majorVersion)) {
+
+      let bedBlock = blocks.bed
+      if (mineflayer.supportFeature('blockSchemeIsFlat', version.majorVersion)) {
         bedBlock = blocks.red_bed
       }
-      const bedId = bedBlock.id
 
+      const bedId = bedBlock.id
       bot.once('chunkColumnLoad', (columnPoint) => {
         for (const bed in beds) {
-          const bedBock = bot.blockAt(beds[bed].foot)
-          const bedBockMetadata = bot.parseBedMetadata(bedBock)
-          assert.strictEqual(bedBockMetadata.facing, beds[bed].facing, 'The facing property seems to be wrong')
-          assert.strictEqual(bedBockMetadata.part, false, 'The part property seems to be wrong') // Is the foot
+          const bedBlock = bot.blockAt(beds[bed].foot)
+          const bedBlockMetadata = bot.parseBedMetadata(bedBlock)
+          assert.strictEqual(bedBlockMetadata.facing, beds[bed].facing, 'The facing property seems to be wrong')
+          assert.strictEqual(bedBlockMetadata.part, false, 'The part property seems to be wrong') // Is the foot
 
-          if (beds[bed].throws) {
-            assert.throws(() => {
-              bot.sleep(bedBock)
-            }, beds[bed].error)
-          } else {
-            assert.doesNotThrow(() => {
-              bot.sleep(bedBock)
-            })
-          }
+          // This is actually sync
+          bot.sleep(bedBlock, (err) => {
+            if (beds[bed].throws) {
+              assert.strictEqual(err.message, beds[bed].error)
+            } else {
+              assert.strictEqual(err, null)
+            }
+          })
         }
 
         done()
