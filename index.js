@@ -80,6 +80,24 @@ function createBot (options = {}) {
   bot.loadPlugins([...internalPlugins, ...externalPlugins])
 
   bot.connect(options)
+
+  for (const key in bot) {
+    if (typeof bot[key] === 'function' && bot[key][Symbol.toStringTag] === 'AsyncFunction') {
+      console.log(`Callbackify: bot.${key}()`)
+      const fn = bot[key]
+
+      const cb = require('util').callbackify(fn)
+
+      bot[key] = function (...args) {
+        if (typeof args[args.length - 1] === 'function') {
+          return cb.apply(bot, args)
+        }
+
+        return fn.apply(bot, args)
+      }
+    }
+  }
+
   return bot
 }
 
