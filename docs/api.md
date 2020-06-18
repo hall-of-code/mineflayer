@@ -195,9 +195,10 @@
       - ["bossBarDeleted" (bossBar)](#bossbardeleted-bossbar)
       - ["bossBarUpdated" (bossBar)](#bossbarupdated-bossbar)
     - [Functions](#functions)
-      - [bot.blockAt(point)](#botblockatpoint)
+      - [bot.blockAt(point, extraInfos=true)](#botblockatpoint-extrainfostrue)
       - [bot.blockInSight(maxSteps, vectorLength)](#botblockinsightmaxsteps-vectorlength)
       - [bot.canSeeBlock(block)](#botcanseeblockblock)
+      - [bot.findBlocks(options)](#botfindblocksoptions)
       - [bot.findBlock(options)](#botfindblockoptions)
       - [bot.canDigBlock(block)](#botcandigblockblock)
       - [bot.recipesFor(itemType, metadata, minResultCount, craftingTable)](#botrecipesforitemtype-metadata-minresultcount-craftingtable)
@@ -1179,9 +1180,9 @@ Fires when new boss bar is updated.
 
 ### Functions
 
-#### bot.blockAt(point)
+#### bot.blockAt(point, extraInfos=true)
 
-Returns the block at `point` or `null` if that point is not loaded.
+Returns the block at `point` or `null` if that point is not loaded. If `extraInfos` set to true, also returns informations about signs, paintings and block entities (slower).
 See `Block`.
 
 #### bot.blockInSight(maxSteps, vectorLength)
@@ -1194,16 +1195,21 @@ Returns the block at which bot is looking at or `null`
 
 Returns true or false depending on whether the bot can see the specified `block`.
 
+#### bot.findBlocks(options)
+
+Finds the closest blocks from the given point.
+ * `options` - Options for the search:
+   - `point` - The start position of the search (center). Default is the bot position.
+   - `matching` - A function that returns true if the given block is a match. Also supports this value being a block id or array of block ids.
+   - `useExtraInfo` - Use extra info when matching (block entities, signs, painting), 2x slower
+   - `maxDistance` - The furthest distance for the search, defaults to 16.
+   - `minCount` - Minimum blocks to find before returning the search. Default to 1. Can return less if not enough blocks are found exploring the whole area. Can return more due to some optimisations.
+
+Returns an array (possibly empty) with the found block coordinates (not the blocks). The array is sorted (closest first)
+
 #### bot.findBlock(options)
 
-Finds the nearest block to the given point.
- * `options` - Additional options for the search:
-   - `point` - The start position of the search.
-   - `matching` - A function that returns true if the given block is a match.  Also supports this value being a block id or array of block ids.
-   - `maxDistance` - The furthest distance for the search, defaults to 16.
-
-This is a simple function, to be used for simple things, for a more complete search using more optimals algorithm,
- use [mineflayer-blockfinder](https://github.com/Darthfett/mineflayer-blockfinder) instead which have a very similar API.
+Alias for `bot.findBlock(options)[0]`. Return a single block or `null`.
 
 #### bot.canDigBlock(block)
 
@@ -1346,6 +1352,7 @@ Equips an item from your inventory.
    - `"torso"`
    - `"legs"`
    - `"feet"`
+   - `"off-hand"` - when available
  * `callback(error)` - optional. called when you have successfully equipped
    the item or when you learn that you have failed to equip the item.
 

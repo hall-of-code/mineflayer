@@ -1,7 +1,7 @@
 # Mineflayer
 
 [![NPM version](https://badge.fury.io/js/mineflayer.svg)](http://badge.fury.io/js/mineflayer)
-[![Build Status](https://circleci.com/gh/PrismarineJS/mineflayer.svg?style=shield)](https://circleci.com/gh/PrismarineJS/mineflayer)
+[![Build Status](https://github.com/PrismarineJS/mineflayer/workflows/CI/badge.svg)](https://github.com/PrismarineJS/mineflayer/actions?query=workflow%3A%22CI%22)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-brightgreen.svg)](https://gitter.im/PrismarineJS/general)
 [![Irc](https://img.shields.io/badge/chat-on%20irc-brightgreen.svg)](https://irc.gitter.im/)
@@ -79,6 +79,15 @@ node your_script.js
 Mineflayer is pluggable; anyone can create a plugin that adds an even
 higher level API on top of Mineflayer.
 
+The most updated and useful are :
+
+ * [pathfinder](https://github.com/Karang/mineflayer-pathfinder) - advanced A* pathfinding with a lot of configurable features
+ * [prismarine-viewer](https://github.com/PrismarineJS/prismarine-viewer) - simple web chunk viewer
+ * [web-inventory](https://github.com/ImHarvol/mineflayer-web-inventory) - web based inventory viewer
+ * [statemachine](https://github.com/TheDudeFromCI/mineflayer-statemachine) - A state machine API for more complex bot behavors
+
+ But also check out :
+
  * [navigate](https://github.com/andrewrk/mineflayer-navigate/) - get around
    easily using A* pathfinding. [YouTube Demo](https://www.youtube.com/watch?v=O6lQdmRz8eE)
  * [radar](https://github.com/andrewrk/mineflayer-radar/) - web based radar
@@ -104,6 +113,7 @@ higher level API on top of Mineflayer.
  * [MinecraftChat](https://github.com/rom1504/MinecraftChat) (last open source version, built by AlexKvazos) -  Minecraft web based chat client <https://minecraftchat.net/>
  * [Cheese Bot](https://github.com/Minecheesecraft/Cheese-Bot) - Plugin based bot with a clean GUI. Made with Node-Webkit. http://bot.ezcha.net/
  * [Chaoscraft](https://github.com/schematical/chaoscraft) - Minecraft bot using genetic algorithms, see [its youtube videos](https://www.youtube.com/playlist?list=PLLkpLgU9B5xJ7Qy4kOyBJl5J6zsDIMceH)
+ * [hexatester/minetelegram](https://github.com/hexatester/minetelegram) -  Minecraft - Telegram bridge, build on top of mineflayer & telegraf.
 
 ## Installation
 
@@ -139,9 +149,15 @@ Example:
 
 Where the "/full/path/to/" is the fully qualified path name.
 
-### Ongoing
+### Testing everything
 
 Simply run: `npm test`
+
+### Testing specific version
+Run `npm test -g <version>`, where `<version>` is a minecraft version like `1.12`, `1.15.2`...
+
+### Testing specific test
+Run `npm test -g <test_name>`, where `<test_name>` is a name of the test like `bed`, `useChests`, `rayTrace`...
 
 ## Updating to a newer protocol version
 

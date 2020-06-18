@@ -1,3 +1,34 @@
+## 2.20.0
+* add extra infos option in find block
+
+## 2.19.2
+* fix ground up for 1.13->1.15
+
+## 2.19.1
+* fix find block (thanks @Karang)
+* improve sign parsing (thanks @cookiedragon234)
+
+## 2.19.0
+* much faster findBlock (thanks @Karang)
+
+## 2.18.0
+* fix bugs in lookAt and setQuickBarSlot
+* add auto_totem example (thanks @AlexProgrammerDE)
+* improve blockAt speed
+
+## 2.17.0
+* physics engine refactor (thanks @Karang)
+* mcdata update for better 1.14 and 1.15 support
+
+## 2.16.0
+* use protodef compiler (thanks @Karang)
+* off-hand support (thanks @Karang)
+* fix type definitions (thanks @dada513)
+
+## 2.15.0
+* fix transfer bugs (thanks @Karang)
+* add typescript definitions (thanks @IdanHo)
+
 ## 2.14.1
 * fix openVillager
 
